@@ -41,10 +41,7 @@ class Game:
         keys = pg.key.get_pressed()
 
         if keys[pg.K_w]:
-            self.player.move_forward()
-
-        if keys[pg.K_s]:
-            self.player.move_backwards()
+            self.player.apply_thrust()
 
         if keys[pg.K_a]:
             self.player.turn_left()

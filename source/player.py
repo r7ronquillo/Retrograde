@@ -8,6 +8,9 @@ ASSETS:
 import pygame as pg
 import math
 
+MAX_VELOCITY = 0.9
+DRAG = 0.999
+
 class Player:
 
     def __init__(self, init_position=pg.Vector2(0,0), init_rotation=0.0, init_scale=0.5):
@@ -22,23 +25,34 @@ class Player:
         self.position = pg.Vector2(init_position)
         self.rotation = init_rotation
 
-        self.speed = 0.5
         self.turn_amount = 0.35
 
-    def draw(self, surface: pg.surface):
+        self.velocity = pg.Vector2(0, 0)
+        self.thrust = 0.0025
+
+    def draw(self, surface: pg.surface):   
+        self._update_position()
+
         surface.blit(self.spaceship_rotated, 
                      (self.position.x - self.spaceship_width_half, 
                       self.position.y - self.spaceship_height_half))
         
-    def move_forward(self):
-        self._move(self.speed)
+    def _update_position(self):
+        self.position.x += self.velocity.x
+        self.position.y += self.velocity.y
 
-    def move_backwards(self):
-        self._move(-self.speed)
+        self.velocity.x *= DRAG
+        self.velocity.y *= DRAG
 
-    def _move(self, move_amount):
-        self.position.x += math.cos(math.radians(self.rotation + 90)) * move_amount
-        self.position.y += -math.sin(math.radians(self.rotation + 90)) * move_amount
+    def apply_thrust(self):
+        angle = self.rotation + 90
+        self.velocity.x += math.cos(math.radians(angle)) * self.thrust
+        self.velocity.y += -math.sin(math.radians(angle)) * self.thrust
+
+        if self.velocity.magnitude() > MAX_VELOCITY:
+            velocity_limit = MAX_VELOCITY / self.velocity.magnitude()
+            self.velocity.x *= velocity_limit
+            self.velocity.y *= velocity_limit
 
     def turn_left(self):
         self._turn(self.turn_amount)
