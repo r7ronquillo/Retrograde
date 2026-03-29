@@ -1,13 +1,16 @@
 import pygame as pg
+from player import Player
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+SCREEN_MIDPOINT = (SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5)
 
 class Game:
 
     def __init__(self):
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.is_running = True
+        self.player = Player()
 
     def start(self):
         pg.display.set_caption("Retrogate")
@@ -18,6 +21,7 @@ class Game:
         while self.is_running:
             self.get_input()
             self.screen.fill((100, 149, 237))
+            self.player.draw(self.screen, SCREEN_MIDPOINT)
             pg.display.flip()
 
         self.quit()
