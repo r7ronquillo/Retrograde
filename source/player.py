@@ -29,6 +29,7 @@ class Player:
 
         self.velocity = pg.Vector2(0, 0)
         self.thrust = 0.0025
+        self.thrust_boosted = 0.05
 
     def draw(self, surface: pg.surface):   
         self._update_position()
@@ -36,13 +37,6 @@ class Player:
         surface.blit(self.spaceship_rotated, 
                      (self.position.x - self.spaceship_width_half, 
                       self.position.y - self.spaceship_height_half))
-        
-    def _update_position(self):
-        self.position.x += self.velocity.x
-        self.position.y += self.velocity.y
-
-        self.velocity.x *= DRAG
-        self.velocity.y *= DRAG
 
     def apply_thrust(self):
         angle = self.rotation + 90
@@ -71,3 +65,10 @@ class Player:
 
         self.spaceship_width_half = self.spaceship_width * 0.5
         self.spaceship_height_half = self.spaceship_height * 0.5
+
+    def _update_position(self):
+        self.position.x += self.velocity.x
+        self.position.y += self.velocity.y
+
+        self.velocity.x *= DRAG
+        self.velocity.y *= DRAG

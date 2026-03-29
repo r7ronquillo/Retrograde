@@ -1,9 +1,12 @@
 import pygame as pg
 from player import Player
+from blackhole import Blackhole
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 SCREEN_MIDPOINT = (SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5)
+
+COLOR_BACKGROUND = (101,115,126)
 
 class Game:
 
@@ -11,17 +14,21 @@ class Game:
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.is_running = True
         self.player = Player(list(SCREEN_MIDPOINT))
+        self.blackhole = Blackhole((250, 350))
 
     def start(self):
-        pg.display.set_caption("Retrogate")
+        pg.display.set_caption("Retrograde")
         self.iterate()
 
     def iterate(self):
 
         while self.is_running:
             self.get_input()
-            self.screen.fill((100, 149, 237))
+            self.screen.fill(COLOR_BACKGROUND)
+
+            self.blackhole.draw(self.screen, self.player)
             self.player.draw(self.screen)
+
             pg.display.flip()
 
         self.quit()
@@ -48,7 +55,7 @@ class Game:
 
         if keys[pg.K_d]:
             self.player.turn_right()
-
+            
     def quit(self):
         pg.quit()
 
